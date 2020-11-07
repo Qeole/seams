@@ -16,13 +16,15 @@ locally.
 instance](https://patchwork.kernel.org/).** This is simply because it has not
 been tested on other instances, and could maybe be adapted in the future.
 
-On that instance, the add-on has been test, mostly because it has not been
-tested with any other instance.ed mostly with the “Netdev + BPF” project. It
-should work with other projects too, but the accuracy for patch detection may
-vary based on the format of the patches submitted to the mailing lists.
+On that instance, the add-on has been tested mostly with the “Netdev + BPF”
+project. It should work with other projects too, but the accuracy for patch
+detection may vary based on the format of the patches submitted to the mailing
+lists.
 
-The add-on was only tested on a Patchwork instance offering the version 1.2 of
-the REST API.
+The add-on was only tested on Linux.
+
+At last, the add-on was only tested on a Patchwork instance offering the
+version 1.2 of the REST API.
 
 ## Installation
 
