@@ -8,7 +8,7 @@ xpi: $(ADDON)
 %.xpi: \
 	manifest.json \
 	README.md LICENSE \
-	icons/action_*.png \
+	icons/*.png \
 	scripts/* popup/*
 	zip -q -r $@ $^
 
