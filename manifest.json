@@ -1,0 +1,41 @@
+{
+    "manifest_version": 2,
+    "applications": {
+        "gecko": {
+            "id": "se@ms",
+            "strict_min_version": "78.0"
+        }
+    },
+    "name": "Seams",
+    "version": "1.0.0",
+    "description": "Patchwork integration for Thunderbird",
+    "author": "Qeole",
+    "homepage_url": "https://github.com/Qeole/seams",
+    "icons": {
+        "64": "icons/seams.png"
+    },
+    "permissions": [
+        "https://patchwork.kernel.org/",
+        "messagesRead"
+    ],
+    "message_display_action": {
+        "browser_style": true,
+        "default_popup": "popup/popup.html",
+        "default_title": "Patch",
+        "theme_icons": [
+            {
+                "light": "icons/action_light_16.png",
+                "dark": "icons/action_dark_16.png",
+                "size": 16
+            },
+            {
+                "light": "icons/action_light_32.png",
+                "dark": "icons/action_dark_32.png",
+                "size": 32
+            }
+        ]
+    },
+    "background": {
+        "page": "scripts/background.html"
+    }
+}

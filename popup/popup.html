@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script type="module" src="popup.js"></script>
+    <style>
+        .section:not(:first-child) {
+            margin-top: 2ex;
+        }
+        .title {
+            font-weight: bold;
+        }
+        span.title {
+            display: block;
+            float: left;
+            min-width: 5em;
+        }
+        div.title {
+            margin-bottom: 1ex;
+        }
+        .subtitle {
+            margin-bottom: 1ex;
+        }
+        .help-note {
+            font-size: smaller;
+            font-weight: normal;
+            color: grey;
+        }
+        ul {
+            padding-left: 2em;
+            margin-top: 0;
+            margin-bottom: 1ex;
+        }
+        ul:last-child {
+            margin-bottom: 0;
+        }
+        .copy-list {
+            list-style: none;
+        }
+        .copy-list li {
+            font-size: smaller;
+            max-width: 400px;
+        }
+        .copy-list li::before {
+            content: "$";
+            color: black;
+            font: smaller;
+            font-family: monospace;
+            font-size: smaller;
+            display: inline-block;
+            margin-left: -1em;
+            width: 1em;
+        }
+        .copy-list li:hover {
+            background-color: #0a84ff;
+            color: white;
+        }
+    </style>
+  </head>
+  <body>
+      <div class="section">
+          <span class="title">Project</span>
+          <span id="popup-project"></span>
+      </div>
+
+      <div class="section">
+          <span class="title">State</span>
+          <span id="popup-state-dot">⬤</span>
+          <span id="popup-state"></span>
+      </div>
+
+      <div class="section">
+          <div class="title">Links <span class="help-note">(Right-click to open in browser or to copy)</span></div>
+          <ul>
+              <li><a id="popup-patch-link">Patchwork (patch)</a></li>
+              <li class="series"><a id="popup-series-link">Patchwork (series)</a></li>
+              <li><a id="popup-mail-archive">Lore archives</a></li>
+          </ul>
+      </div>
+
+      <div class="section">
+          <div class="title">Apply locally <span class="help-note">(Click to copy to clipboard)</span></div>
+          <div class="subtitle">Patch</div>
+          <ul class="copy-list">
+              <li><code>git-pw patch apply <span id="popup-apply-patch-pw"></span></code></li>
+              <li><code>curl <span id="popup-apply-patch-git"></span> | git am -</code></li>
+          </ul>
+          <div class="subtitle series">Series</div>
+          <ul class="copy-list series">
+              <li><code>git-pw series apply <span id="popup-apply-series-pw"></span></code></li>
+              <li><code>curl <span id="popup-apply-series-git"></span> | git am -</code></li>
+          </ul>
+      </div>
+  </body>
+</html>
