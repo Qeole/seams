@@ -1,10 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 
-import { getStateColor } from "../scripts/states.js";
+import { getCheckResultColor, getStateColor } from "../scripts/states.js";
+import { getCheckDetails } from "../scripts/requests.js";
 
 const metadataValues = {
     "popup-project": "projectName",
     "popup-state": "state",
+    "popup-check-result": "checkResult",
 };
 
 const metadataLinks = {
@@ -18,6 +20,8 @@ const applyLinks = {
     "popup-apply-series-pw": "seriesId",
     "popup-apply-series-git": "seriesMbox",
 };
+
+var checkUrl;
 
 function copy() {
     var node = this;
@@ -46,6 +50,39 @@ function copy() {
     });
 }
 
+function addCheckDetailRow(step) {
+    let row = document.createElement("TR");
+
+    let context = document.createElement("TD");
+    let link = document.createElement("A");
+    link.textContent = step.name;
+    link.href = step.stepUrl;
+    context.appendChild(link);
+    row.appendChild(context);
+
+    let check = document.createElement("TD");
+    check.textContent = step.state;
+    check.style.color = getCheckResultColor(step.state);
+    row.appendChild(check);
+
+    let description = document.createElement("TD");
+    description.textContent = step.description;
+    row.appendChild(description);
+
+    let checkDetails = document.getElementById("popup-check-details");
+    checkDetails.appendChild(row);
+}
+
+async function fillCheckDetails() {
+    let detailsData = await getCheckDetails(checkUrl);
+    if (!detailsData || !detailsData[0])
+        return;
+
+    for (let step of detailsData) {
+        addCheckDetailRow(step);
+    }
+}
+
 // Not tested yet: It appears even lone patches are part of a series.
 function deleteSeries() {
     let seriesItems = document.getElementsByClassName("series");
@@ -66,6 +103,18 @@ function updatePopup(msg) {
 
     let stateDot = document.getElementById("popup-state-dot");
     stateDot.style.color = getStateColor(msg.state);
+
+    let checkDot = document.getElementById("popup-check-dot");
+    checkDot.style.color = getCheckResultColor(msg.checkResult);
+
+    let checkDetails = document.getElementById("popup-check-details-block");
+    if (msg.checkResult == "pending") {
+        checkDetails.remove();
+    } else {
+        checkUrl = msg.checkUrl;
+        checkDetails.addEventListener("click", fillCheckDetails,
+                                      { once: true });
+    }
 
     if (msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
         let lore = document.getElementById("archive-name");

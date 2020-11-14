@@ -30,3 +30,26 @@ export function getStateColor(state) {
 
     return color;
 }
+
+export function getCheckResultColor(result) {
+    let color = "black";
+
+    switch (result) {
+    case "success":
+        color = "green";
+        break;
+    case "warning":
+        color = "orange";
+        break;
+    case "fail":
+        color = "red";
+        break;
+    case "pending":
+        color = "blue";
+        break;
+    default:
+        break;
+    }
+
+    return color;
+}

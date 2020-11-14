@@ -4,8 +4,8 @@ import { APIServer } from "./patchwork.js";
 
 const AddonName = browser.runtime.getManifest().name;
 
-function sendReq(path) {
-    return fetch(`${APIServer}${path}`)
+function sendReq(url) {
+    return fetch(url)
         .then(resp => resp.json())
         .then(data => { return data; })
         .catch(reason => {
@@ -14,8 +14,12 @@ function sendReq(path) {
         });
 }
 
+function sendReqForPath(path) {
+    return sendReq(`${APIServer}${path}`);
+}
+
 export async function getPatchInfo(msgId) {
-    let data = await sendReq(`/patches/?msgid=${msgId}`);
+    let data = await sendReqForPath(`/patches/?msgid=${msgId}`);
     if (!data || !data[0])
         return;
 
@@ -26,6 +30,8 @@ export async function getPatchInfo(msgId) {
         archiveUrl: data[0].list_archive_url,
         patchMbox: data[0].mbox,
         patchId: data[0].id,
+        checkResult: data[0].check,
+        checkUrl: data[0].checks,
     };
     if (data[0].series?.[0]) {
         // Append fields to query string to make sure we do not filter on
@@ -36,4 +42,22 @@ export async function getPatchInfo(msgId) {
     }
 
     return patchInfo;
+}
+
+export async function getCheckDetails(url) {
+    let data = await sendReq(url);
+    if (!data || !data[0])
+        return;
+
+    let checkDetails = [];
+    for (let step of data) {
+        checkDetails.push({
+            name: step.context,
+            state: step.state,
+            stepUrl: step.target_url,
+            description: step.description,
+        });
+    }
+
+    return checkDetails;
 }

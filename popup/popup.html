@@ -69,6 +69,12 @@
             list-style: none;
             padding-left: 0;
         }
+        table {
+            font-size: small;
+        }
+        th, tr:hover {
+            background-color: rgb(217, 217, 218);
+        }
     </style>
   </head>
   <body>
@@ -81,6 +87,24 @@
           <span class="title">State</span>
           <span id="popup-state-dot">⬤</span>
           <span id="popup-state"></span>
+      </div>
+
+      <div class="section">
+          <span class="title">Checks</span>
+          <span id="popup-check-dot">●</span>
+          <span id="popup-check-result"></span>
+          <div id="popup-check-details-block">
+              <details><summary>Detailed results <span class="help-note">(Click to expand)</span></summary>
+                  <table id="popup-check-details">
+                      <tr>
+                          <th>Context</th>
+                          <th>Check</th>
+                          <th>Description</th>
+                      </tr>
+                  </table >
+              </details>
+          </div>
+          <span id="popup-check-results"></span>
       </div>
 
       <div class="section">
