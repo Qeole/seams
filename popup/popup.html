@@ -5,8 +5,13 @@
     <meta charset="utf-8">
     <script type="module" src="popup.js"></script>
     <style>
-        .section:not(:first-child) {
-            margin-top: 2ex;
+        .section:first-child {
+            margin-top: 1ex;
+        }
+        .section {
+            margin: 0 1ex 1ex;
+            padding: 1ex;
+            background-color: rgb(239, 240, 241);
         }
         .title {
             font-weight: bold;
@@ -21,6 +26,9 @@
         }
         .subtitle {
             margin-bottom: 1ex;
+            font-weight: bold;
+            font-size: small;
+            color: rgb(66, 68, 70);
         }
         .help-note {
             font-size: smaller;
@@ -37,10 +45,11 @@
         }
         .copy-list {
             list-style: none;
+            padding-left: 10px;
         }
         .copy-list li {
             font-size: smaller;
-            max-width: 400px;
+            width: 400px;
         }
         .copy-list li::before {
             content: "$";
@@ -49,12 +58,16 @@
             font-family: monospace;
             font-size: smaller;
             display: inline-block;
-            margin-left: -1em;
-            width: 1em;
+            margin-left: -10px;
+            width: 10px;
         }
         .copy-list li:hover {
             background-color: #0a84ff;
             color: white;
+        }
+        .link-list {
+            list-style: none;
+            padding-left: 0;
         }
     </style>
   </head>
@@ -72,7 +85,7 @@
 
       <div class="section">
           <div class="title">Links <span class="help-note">(Right-click to open in browser or to copy)</span></div>
-          <ul>
+          <ul class="link-list">
               <li><a id="popup-patch-link">Patchwork (patch)</a></li>
               <li class="series"><a id="popup-series-link">Patchwork (series)</a></li>
               <li><a id="popup-mail-archive">Lore archives</a></li>
@@ -80,7 +93,7 @@
       </div>
 
       <div class="section">
-          <div class="title">Apply locally <span class="help-note">(Click to copy to clipboard)</span></div>
+          <div class="title">Apply Locally <span class="help-note">(Click commands to copy to clipboard)</span></div>
           <div class="subtitle">Patch</div>
           <ul class="copy-list">
               <li><code>git-pw patch apply <span id="popup-apply-patch-pw"></span></code></li>
