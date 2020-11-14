@@ -44,6 +44,11 @@ function updatePopup(msg) {
     let stateDot = document.getElementById("popup-state-dot");
     stateDot.style.color = getStateColor(msg.state);
 
+    if (msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
+        let lore = document.getElementById("archive-name");
+        lore.textContent = "Lore";
+    }
+
     let seriesUrl = msg.seriesUrl;
     if (seriesUrl) {
         let seriesLink = document.getElementById("popup-series-link");
