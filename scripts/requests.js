@@ -28,8 +28,8 @@ export async function getPatchInfo(msgId) {
         patchId: data[0].id,
     };
     if (data[0].series?.[0]) {
-         // Append fields to query string to make sure we do not filter on
-         // status and archived state, or the search may fail.
+        // Append fields to query string to make sure we do not filter on
+        // status and archived state, or the search may fail.
         patchInfo.seriesUrl = data[0].series[0].web_url + "&state=*&archive=both";
         patchInfo.seriesId = data[0].series[0].id
         patchInfo.seriesMbox = data[0].series[0].mbox
