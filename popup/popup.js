@@ -20,7 +20,30 @@ const applyLinks = {
 };
 
 function copy() {
-    navigator.clipboard.writeText(this.textContent);
+    var node = this;
+    var content = this.innerHTML;
+    const transDur = 0.5;
+
+    node.removeEventListener("click", copy);
+    navigator.clipboard.writeText(this.textContent).then(() => {
+        node.style["background-color"] = "green";
+        node.textContent = "Copied to clipboard";
+    }).catch(() => {
+        node.style["background-color"] = "red";
+        node.textContent = "Failed to copy to clipboard";
+    }).finally(() => {
+        node.style.color = "white";
+        node.style.transition = `color ${transDur}s, background-color ${transDur}s`;
+        window.setTimeout(() => {
+            node.style["background-color"] = "";
+            node.style.color = "";
+        }, transDur * 1000);
+        window.setTimeout(() => {
+            node.style.transition = "";
+            node.innerHTML = content;
+            node.addEventListener("click", copy);
+        }, transDur * 1000 * 2);
+    });
 }
 
 // Not tested yet: It appears even lone patches are part of a series.
@@ -73,7 +96,7 @@ function init() {
 // It is not allowed to call JavaScript from the HTML page, so we add listeners
 // on the click event for the commands to copy.
 for (let id in applyLinks) {
-    let node = document.getElementById(id).parentNode;
+    let node = document.getElementById(id).parentNode.parentNode;
     node.addEventListener("click", copy);
 }
 
