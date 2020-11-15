@@ -21,8 +21,10 @@ const applyLinks = {
     "popup-apply-series-git": "seriesMbox",
 };
 
+// This should mirror the value for "copy-list .li" in popup CSS!
 const initCommandWidth = "400px";
 var commandWidth = initCommandWidth;
+
 var checkUrl;
 
 function copy() {
@@ -30,7 +32,9 @@ function copy() {
     var content = this.innerHTML;
     const transDur = 0.5;
 
+    // Remove listener to avoid copying feedback message if user clicks twice.
     node.removeEventListener("click", copy);
+    // Copy to clipboard, and print message.
     navigator.clipboard.writeText(this.textContent).then(() => {
         node.style["background-color"] = "green";
         node.textContent = "Copied to clipboard";
@@ -38,6 +42,7 @@ function copy() {
         node.style["background-color"] = "red";
         node.textContent = "Failed to copy to clipboard";
     }).finally(() => {
+        // Revert to normal content and style.
         node.style.color = "white";
         node.style.transition = `color ${transDur}s, background-color ${transDur}s`;
         window.setTimeout(() => {
@@ -84,6 +89,8 @@ async function fillCheckDetails() {
         addCheckDetailRow(step);
     }
 
+    // Get width for table with check results; if wider than commands, update
+    // width for commands.
     let width = window.getComputedStyle(document.getElementById("popup-check-details")).width;
     if (width > initCommandWidth) {
         commandWidth = width;
@@ -95,6 +102,7 @@ function updateCommandsWidth() {
     let rules = document.getElementById("popup-style").sheet.rules;
     let rule = Array.prototype.find.call(rules, rule => rule.selectorText == ".copy-list li");
     let fold = document.getElementById("popup-check-details-fold");
+    // When fold is open, adapt commands width if necessary.
     rule.style.width = fold.open ? commandWidth : initCommandWidth;
 }
 
@@ -127,6 +135,8 @@ function updatePopup(msg) {
         checkDetailsBlock.remove();
     } else {
         checkUrl = msg.checkUrl;
+        // Trigger API request and table fill on click, but make sure this is
+        // run only once.
         checkDetailsBlock.addEventListener("click", fillCheckDetails,
                                       { once: true });
         let checkDetailsFold = document.getElementById("popup-check-details-fold");
