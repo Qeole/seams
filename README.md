@@ -52,6 +52,8 @@ On clicking the button, a panel appears and displays:
 
 - The name of the Patchwork project for the patch.
 - The state of the patch (for example, `new`, `superseded`, `accepted`).
+- The state of CI checks, with expandable details if any. Click to load and
+  expand the details.
 - Links to the Patchwork pages for the patch and the series to which it
   belongs. Clicking the links open the pages in the panel (if anyone knows how
   to open them directly in a browser instead, please reach out). You can
