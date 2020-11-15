@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <script type="module" src="popup.js"></script>
-    <style>
+    <style id="popup-style">
         .section:first-child {
             margin-top: 1ex;
         }
@@ -94,7 +94,7 @@
           <span id="popup-check-dot">●</span>
           <span id="popup-check-result"></span>
           <div id="popup-check-details-block">
-              <details><summary>Detailed results <span class="help-note">(Click to expand)</span></summary>
+              <details id="popup-check-details-fold"><summary>Detailed results <span class="help-note">(Click to expand)</span></summary>
                   <table id="popup-check-details">
                       <tr>
                           <th>Context</th>

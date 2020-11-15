@@ -21,6 +21,8 @@ const applyLinks = {
     "popup-apply-series-git": "seriesMbox",
 };
 
+const initCommandWidth = "400px";
+var commandWidth = initCommandWidth;
 var checkUrl;
 
 function copy() {
@@ -81,6 +83,19 @@ async function fillCheckDetails() {
     for (let step of detailsData) {
         addCheckDetailRow(step);
     }
+
+    let width = window.getComputedStyle(document.getElementById("popup-check-details")).width;
+    if (width > initCommandWidth) {
+        commandWidth = width;
+        updateCommandsWidth();
+    }
+}
+
+function updateCommandsWidth() {
+    let rules = document.getElementById("popup-style").sheet.rules;
+    let rule = Array.prototype.find.call(rules, rule => rule.selectorText == ".copy-list li");
+    let fold = document.getElementById("popup-check-details-fold");
+    rule.style.width = fold.open ? commandWidth : initCommandWidth;
 }
 
 // Not tested yet: It appears even lone patches are part of a series.
@@ -107,13 +122,15 @@ function updatePopup(msg) {
     let checkDot = document.getElementById("popup-check-dot");
     checkDot.style.color = getCheckResultColor(msg.checkResult);
 
-    let checkDetails = document.getElementById("popup-check-details-block");
+    let checkDetailsBlock = document.getElementById("popup-check-details-block");
     if (msg.checkResult == "pending") {
-        checkDetails.remove();
+        checkDetailsBlock.remove();
     } else {
         checkUrl = msg.checkUrl;
-        checkDetails.addEventListener("click", fillCheckDetails,
+        checkDetailsBlock.addEventListener("click", fillCheckDetails,
                                       { once: true });
+        let checkDetailsFold = document.getElementById("popup-check-details-fold");
+        checkDetailsFold.addEventListener("toggle", updateCommandsWidth);
     }
 
     if (msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
