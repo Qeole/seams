@@ -2,7 +2,7 @@
 
 import { getPatchInfo } from "./requests.js";
 import { getStateColor } from "./states.js";
-import { isPatch } from "./patches.js";
+import { findPatchworkInstance } from "./patches.js";
 import { enableCurrentTab, disableCurrentTab } from "./tabs.js"
 
 var patchMetaData = {};
@@ -28,14 +28,15 @@ function updateActionBadge(state) {
 async function updateActionForMsg(tab, message) {
     let msgFull = await browser.messages.getFull(message.id);
 
-    if (!isPatch(message, msgFull)) {
+    let patchwork = findPatchworkInstance(message, msgFull);
+    if (!patchwork) {
         disableCurrentTab();
         return;
     }
     enableCurrentTab();
 
     let msgId = await getMessageId(msgFull);
-    patchMetaData = await getPatchInfo(msgId);
+    patchMetaData = await getPatchInfo(patchwork, msgId);
 
     // If we failed to get information for this patch, disable the button.
     if (!patchMetaData) {

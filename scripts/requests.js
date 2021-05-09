@@ -1,7 +1,5 @@
 /* SPDX-License-Identifier: MIT */
 
-import { APIServer } from "./patchwork.js";
-
 const AddonName = browser.runtime.getManifest().name;
 
 function sendReq(url) {
@@ -14,12 +12,12 @@ function sendReq(url) {
         });
 }
 
-function sendReqForPath(path) {
-    return sendReq(`${APIServer}${path}`);
+function sendReqForPath(patchwork, path) {
+    return sendReq(`${patchwork.APIServer}${path}`);
 }
 
-export async function getPatchInfo(msgId) {
-    let data = await sendReqForPath(`/patches/?msgid=${msgId}`);
+export async function getPatchInfo(patchwork, msgId) {
+    let data = await sendReqForPath(patchwork, `/patches/?msgid=${msgId}`);
     if (!data || !data[0])
         return;
 

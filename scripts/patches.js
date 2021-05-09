@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 
-import { mailingListString } from "./patchwork.js";
+import { patchworks } from "./patchwork.js";
 
 Array.prototype.hasSubstring = function (s) {
     for (let i = 0; i < this.length; i++)
@@ -10,27 +10,34 @@ Array.prototype.hasSubstring = function (s) {
     return false;
 };
 
-export function isPatch(message, msgFull) {
+export function findPatchworkInstance(message, msgFull) {
     // Check this was sent to a kernel mailing list.
     // We could maybe use a specific header with the mailing list ID instead,
     // but I am not sure that tools like l2md
     // (https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git/) set
     // them.
-    if (!(message.recipients.hasSubstring(mailingListString) ||
-          message.ccList.hasSubstring(mailingListString)))
-        return false;
+    let patchwork;
+    for (let instance of patchworks) {
+        if (message.recipients.hasSubstring(instance.mailingListString) ||
+            message.ccList.hasSubstring(instance.mailingListString)) {
+            patchwork = instance;
+            break;
+        }
+    }
+    if (!patchwork)
+        return null;
 
     // message.subject trims the "Re: " prefix, get real subject from msgFull.
     let subject = msgFull.headers.subject[0];
 
     // Check this is not a reply to a patch.
     if (subject[0] != "[")
-        return false;
+        return null;
 
     // Check this is not a cover letter.
     // Might need a more robust (but slower) regex if too fragile.
     if (subject.indexOf(" 0/") != -1)
-        return false;
+        return null;
 
     // Check this was sent with git-email.
     // /!\ In fact we don't want that, other tools are also used in the wild.
@@ -38,5 +45,5 @@ export function isPatch(message, msgFull) {
     // if (!(msgFull.headers["x-mailer"]?.[0].indexOf("git-send-email") >= 0))
     //     return false;
 
-    return true;
+    return patchwork;
 }
