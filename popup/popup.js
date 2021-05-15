@@ -143,7 +143,7 @@ function updatePopup(msg) {
         checkDetailsFold.addEventListener("toggle", updateCommandsWidth);
     }
 
-    if (msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
+    if (msg.archiveUrl && msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
         let lore = document.getElementById("archive-name");
         lore.textContent = "Lore";
     }
