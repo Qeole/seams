@@ -12,14 +12,11 @@ locally.
 
 ## Notes
 
-**At this time the add-on only works for the [Linux Patchwork
-instance](https://patchwork.kernel.org/).** This is simply because it has not
-been tested on other instances, and could maybe be adapted in the future.
-
-On that instance, the add-on has been tested mostly with the “Netdev + BPF”
-project. It should work with other projects too, but the accuracy for patch
-detection may vary based on the format of the patches submitted to the mailing
-lists.
+The add-on has been little tested on instances other than the [Linux Patchwork
+instance](https://patchwork.kernel.org/). On that instance, the add-on has
+been tested mostly with the “Netdev + BPF” project. It should work with other
+projects too, but the accuracy for patch detection may vary based on the format
+of the patches submitted to the mailing lists.
 
 The add-on was only tested on Linux.
 
@@ -65,6 +62,10 @@ On clicking the button, a panel appears and displays:
 The button is not displayed when the message is not recognized as a patch, or
 when the add-on fails to retrieve metadata from Patchwork.
 
+The Patchwork instance(s) to use is configurable via the “Preferences” tab for
+the add-on. It defaults to the [Linux Patchwork
+instance](https://patchwork.kernel.org/).
+
 ## Internals
 
 Patch detection currently works as follows:
@@ -80,6 +81,12 @@ When a message is displayed and recognized as a patch, the add-on sends an API
 request to the Patchwork instance to retrieve the state of the patch as well as
 some metadata. On clicking the action button, this information is reused to
 generate the panel.
+
+If several Patchwork instances are configured, and the message matches the
+pattern for several of them, the first one matching (as per the order in which
+instances are defined in the “Preferences” tab) is considered for retrieving
+and printing information related to the patch. Other matching instances are
+ignored.
 
 ## Disclaimer
 
