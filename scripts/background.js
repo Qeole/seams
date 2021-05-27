@@ -28,7 +28,7 @@ function updateActionBadge(state) {
 async function updateActionForMsg(tab, message) {
     let msgFull = await browser.messages.getFull(message.id);
 
-    let patchwork = findPatchworkInstance(message, msgFull);
+    let patchwork = await findPatchworkInstance(message, msgFull);
     if (!patchwork) {
         disableCurrentTab();
         return;

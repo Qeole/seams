@@ -15,8 +15,9 @@
         "64": "icons/seams.png"
     },
     "permissions": [
-        "https://patchwork.kernel.org/",
-        "messagesRead"
+        "https://*/",
+        "messagesRead",
+        "storage"
     ],
     "message_display_action": {
         "browser_style": true,
@@ -37,5 +38,9 @@
     },
     "background": {
         "page": "scripts/background.html"
+    },
+    "options_ui": {
+        "browser_style": true,
+        "page": "options/ui.html"
     }
 }

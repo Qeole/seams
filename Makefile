@@ -9,7 +9,7 @@ xpi: $(ADDON)
 	manifest.json \
 	README.md LICENSE \
 	icons/*.png \
-	scripts/* popup/*
+	scripts/* popup/* options/*
 	zip -q -r $@ $^
 
 clean:

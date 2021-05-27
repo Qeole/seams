@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 
-import { patchworks } from "./patchwork.js";
+import { getPatchworks } from "./options.js";
 
 Array.prototype.hasSubstring = function (s) {
     for (let i = 0; i < this.length; i++)
@@ -10,12 +10,13 @@ Array.prototype.hasSubstring = function (s) {
     return false;
 };
 
-export function findPatchworkInstance(message, msgFull) {
+export async function findPatchworkInstance(message, msgFull) {
     // Check this was sent to a kernel mailing list.
     // We could maybe use a specific header with the mailing list ID instead,
     // but I am not sure that tools like l2md
     // (https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git/) set
     // them.
+    let patchworks = await getPatchworks();
     let patchwork;
     for (let instance of patchworks) {
         if (message.recipients.hasSubstring(instance.mailingListString) ||

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style type="text/css">
+            body {
+                overflow: hidden;
+                background-color: var(--in-content-box-background);
+            }
+            button {
+                min-width: 7em;
+                text-align: center;
+                float: right;
+            }
+            label > b {
+                padding: 7px 0;
+            }
+            .text-label {
+                display: flex;
+            }
+            .button-label {
+                display: flex;
+                justify-content: space-between;
+            }
+            label code {
+                margin-right: .5em;
+            }
+            input[type="text"] {
+                flex: 1;
+                margin-left: 1em;
+            }
+            .help-message {
+                color: var(--in-content-deemphasized-text);
+            }
+        </style>
+    </head>
+    <body>
+        <fieldset id="patchwork-instance-0" class="patchwork-instance">
+            <legend>Patchwork instance</legend>
+            <p>
+            <label class="text-label">
+                <b>Patchwork API server URL</b>
+                <input class="patchwork-api-server" type="text"/>
+            </label>
+            <span class="help-message">
+                Indicate the URL of the API server for the patchwork
+                instance.<br />
+                For example: <code>https://patchwork.kernel.org/api/1.2</code>
+            </span>
+            </p>
+
+            <p>
+            <label class="text-label">
+                <b>Pattern to identify patches for this instance</b>
+                <input class="patchwork-ml-string" type="text"/>
+            </label>
+            <span class="help-message">
+                Pick a pattern (substring) that will be matched against the
+                recipient and carbon-copy addresses in the messages. Messages
+                with a match are considered as patches for this instance, and
+                trigger information request to the API server.<br />
+                For example: <code>@vger.kernel.org</code>
+            </span>
+            </p>
+        </fieldset>
+
+        <p>
+        <label class="button-label">
+            <b>Add a Patchwork instance</b>
+            <button id="addPatchworkInstance">New Patchwork instance</button>
+        </label>
+        <span class="help-message">
+            Click to add fields to support an additional project. To delete a
+            project, simply leave its <em>Patchwork API server URL</em> field
+            empty.
+            <br /><br />
+            If a message matches the pattern for several projects, the add-on
+            retrieves information for the <em>first matching project</em> (as
+            per the order in which they are defined above in this page).
+        </span>
+        </p>
+
+        <p>
+        <label class="button-label">
+            <b>Reset options</b>
+            <button id="reset">Reset</button>
+        </label>
+        <span class="help-message">
+            Click to reset all options to their default values.
+        </span>
+        </p>
+
+        <script type="module" src="listeners.js"></script>
+    </body>
+</html>
