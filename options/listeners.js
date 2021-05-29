@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 prefs.savePatchworkTextOptions(e);
             });
             break;
+        case "checkbox":
+            input.addEventListener("change", (e) => {
+                prefs.saveDisplayCheckOptions(e);
+            });
+            break;
         default:
         }
     }

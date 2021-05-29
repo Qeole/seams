@@ -1,7 +1,8 @@
 /* SPDX-License-Identifier: MIT */
 
-import { getCheckResultColor, getStateColor } from "../scripts/states.js";
+import { getDisplayOpts } from "../scripts/options.js";
 import { getCheckDetails } from "../scripts/requests.js";
+import { getCheckResultColor, getStateColor } from "../scripts/states.js";
 
 const metadataValues = {
     "popup-project": "projectName",
@@ -19,6 +20,16 @@ const applyLinks = {
     "popup-apply-patch-git": "patchMbox",
     "popup-apply-series-id": "seriesId",
     "popup-apply-series-git": "seriesMbox",
+};
+
+const displayOptsIds = {
+    "section-checks": "checks",
+    "section-links": "links",
+};
+
+const displayOptsClasses = {
+    "item-gitpw": "gitpw",
+    "item-curl": "curl",
 };
 
 // This should mirror the value for "copy-list .li" in popup CSS!
@@ -113,53 +124,88 @@ function deleteSeries() {
         node.remove();
 }
 
-function updatePopup(msg) {
+async function updatePopup(msg) {
+    // Hide elements that user does not want to display.
+    let displayOpts = await getDisplayOpts();
+    for (let key in displayOptsIds) {
+        if (!displayOpts[displayOptsIds[key]]) {
+            let node = document.getElementById(key);
+            node.style.display = "none";
+        }
+    }
+    for (let key in displayOptsClasses) {
+        if (!displayOpts[displayOptsClasses[key]]) {
+            let nodes = document.getElementsByClassName(key);
+            for (let node of nodes)
+                node.style.display = "none";
+        }
+    }
+    let shouldDisplaySecApply = displayOpts.giwpw || displayOpts.curl || displayOpts.id;
+    if (!shouldDisplaySecApply) {
+        let node = document.getElementById("section-apply");
+        node.style.display = "none";
+    }
+
+    // Project name and state.
+
     for (let key in metadataValues) {
         let node = document.getElementById(key);
         node.textContent = msg[metadataValues[key]];
     }
 
-    for (let key in metadataLinks) {
-        let link = document.getElementById(key);
-        link.href = msg[metadataLinks[key]];
-    }
-
     let stateDot = document.getElementById("popup-state-dot");
     stateDot.style.color = getStateColor(msg.state);
 
-    let checkDot = document.getElementById("popup-check-dot");
-    checkDot.style.color = getCheckResultColor(msg.checkResult);
+    // Checks.
 
-    let checkDetailsBlock = document.getElementById("popup-check-details-block");
-    if (msg.checkResult == "pending") {
-        checkDetailsBlock.remove();
-    } else {
-        checkUrl = msg.checkUrl;
-        // Trigger API request and table fill on click, but make sure this is
-        // run only once.
-        checkDetailsBlock.addEventListener("click", fillCheckDetails,
-                                      { once: true });
-        let checkDetailsFold = document.getElementById("popup-check-details-fold");
-        checkDetailsFold.addEventListener("toggle", updateCommandsWidth);
+    if (displayOpts.checks) {
+        let checkDot = document.getElementById("popup-check-dot");
+        checkDot.style.color = getCheckResultColor(msg.checkResult);
+
+        let checkDetailsBlock = document.getElementById("popup-check-details-block");
+        if (msg.checkResult == "pending") {
+            checkDetailsBlock.remove();
+        } else {
+            checkUrl = msg.checkUrl;
+            // Trigger API request and table fill on click, but make sure this
+            // is run only once.
+            checkDetailsBlock.addEventListener("click", fillCheckDetails,
+                                          { once: true });
+            let checkDetailsFold = document.getElementById("popup-check-details-fold");
+            checkDetailsFold.addEventListener("toggle", updateCommandsWidth);
+        }
     }
 
-    if (msg.archiveUrl && msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
-        let lore = document.getElementById("archive-name");
-        lore.textContent = "Lore";
+    // Links.
+
+    if (displayOpts.links) {
+        for (let key in metadataLinks) {
+            let link = document.getElementById(key);
+            link.href = msg[metadataLinks[key]];
+        }
+
+        if (msg.archiveUrl && msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
+            let lore = document.getElementById("archive-name");
+            lore.textContent = "Lore";
+        }
+
+        let seriesUrl = msg.seriesUrl;
+        if (seriesUrl) {
+            let seriesLink = document.getElementById("popup-series-link");
+            seriesLink.href = seriesUrl;
+        } else {
+            deleteSeries();
+        }
     }
 
-    let seriesUrl = msg.seriesUrl;
-    if (seriesUrl) {
-        let seriesLink = document.getElementById("popup-series-link");
-        seriesLink.href = seriesUrl;
-    } else {
-        deleteSeries();
-    }
+    // Commands to apply locally.
 
-    for (let key in applyLinks) {
-        let refs = document.getElementsByClassName(key);
-        for (let ref of refs)
-            ref.textContent = msg[applyLinks[key]];
+    if (shouldDisplaySecApply) {
+        for (let key in applyLinks) {
+            let refs = document.getElementsByClassName(key);
+            for (let ref of refs)
+                ref.textContent = msg[applyLinks[key]];
+        }
     }
 }
 

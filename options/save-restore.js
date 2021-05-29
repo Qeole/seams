@@ -9,6 +9,13 @@ const patchworkTextOptionMap = {
     ".patchwork-ml-string": "mailingListString",
 };
 
+const displayCheckOptionMap = {
+    "display-checks": "checks",
+    "display-links": "links",
+    "display-gitpw": "gitpw",
+    "display-curl": "curl",
+}
+
 function loadOption(id) {
     return browser.storage.local.get(id).then((res) => {
         if (res[id] != undefined)
@@ -16,6 +23,24 @@ function loadOption(id) {
         else
             return DefaultOptions[id];
     }, `[${AddonName}] Failed to load option`);
+}
+
+function saveDisplayCheckOptions(e) {
+    let options = {};
+    for (let id in displayCheckOptionMap) {
+        let checkbox = document.getElementById(id);
+        options[displayCheckOptionMap[id]] = checkbox.checked;
+    }
+
+    return browser.storage.local.set({display: options});
+}
+
+async function restoreDisplayCheckOptions() {
+    let options = await loadOption("display");
+    for (let id in displayCheckOptionMap) {
+        let checkbox = document.getElementById(id);
+        checkbox.checked = options[displayCheckOptionMap[id]];
+    }
 }
 
 function savePatchworkTextOptions(e) {
@@ -103,6 +128,7 @@ function restorePatchworkInstances() {
 
 async function restoreAllOptions() {
     await restorePatchworkInstances();
+    await restoreDisplayCheckOptions();
 }
 
 function deleteAdditionalInstances() {
@@ -126,4 +152,5 @@ export { addInstanceBlock };
 export { loadOption };
 export { resetAllOptions };
 export { restoreAllOptions };
+export { saveDisplayCheckOptions };
 export { savePatchworkTextOptions };
