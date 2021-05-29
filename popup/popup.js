@@ -28,6 +28,7 @@ const displayOptsIds = {
 };
 
 const displayOptsClasses = {
+    "item-id": "id",
     "item-gitpw": "gitpw",
     "item-curl": "curl",
 };

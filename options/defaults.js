@@ -10,6 +10,7 @@ const DefaultOptions = {
     display: {
         checks: true,
         links: true,
+        id: false,
         gitpw: true,
         curl: true,
     }
