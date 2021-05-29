@@ -12,6 +12,7 @@ const patchworkTextOptionMap = {
 const displayCheckOptionMap = {
     "display-checks": "checks",
     "display-links": "links",
+    "display-id": "id",
     "display-gitpw": "gitpw",
     "display-curl": "curl",
 }
