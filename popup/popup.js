@@ -15,9 +15,9 @@ const metadataLinks = {
 };
 
 const applyLinks = {
-    "popup-apply-patch-pw": "patchId",
+    "popup-apply-patch-id": "patchId",
     "popup-apply-patch-git": "patchMbox",
-    "popup-apply-series-pw": "seriesId",
+    "popup-apply-series-id": "seriesId",
     "popup-apply-series-git": "seriesMbox",
 };
 
