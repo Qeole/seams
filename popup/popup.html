@@ -51,7 +51,11 @@
             font-size: smaller;
             width: 400px;
         }
-        .copy-list li::before {
+        .copy-list li:hover {
+            background-color: #0a84ff;
+            color: white;
+        }
+        .shell-cmd:before {
             content: "$";
             color: black;
             font: smaller;
@@ -60,10 +64,6 @@
             display: inline-block;
             margin-left: -10px;
             width: 10px;
-        }
-        .copy-list li:hover {
-            background-color: #0a84ff;
-            color: white;
         }
         .link-list {
             list-style: none;
@@ -120,13 +120,13 @@
           <div class="title">Apply Locally <span class="help-note">(Click commands to copy to clipboard)</span></div>
           <div class="subtitle">Patch</div>
           <ul class="copy-list">
-              <li><code>git-pw patch apply <span id="popup-apply-patch-pw"></span></code></li>
-              <li><code>curl <span id="popup-apply-patch-git"></span> | git am -</code></li>
+              <li class="shell-cmd"><code>git-pw patch apply <span id="popup-apply-patch-pw"></span></code></li>
+              <li class="shell-cmd"><code>curl <span id="popup-apply-patch-git"></span> | git am -</code></li>
           </ul>
           <div class="subtitle series">Series</div>
           <ul class="copy-list series">
-              <li><code>git-pw series apply <span id="popup-apply-series-pw"></span></code></li>
-              <li><code>curl <span id="popup-apply-series-git"></span> | git am -</code></li>
+              <li class="shell-cmd"><code>git-pw series apply <span id="popup-apply-series-pw"></span></code></li>
+              <li class="shell-cmd"><code>curl <span id="popup-apply-series-git"></span> | git am -</code></li>
           </ul>
       </div>
   </body>
