@@ -157,8 +157,8 @@ function updatePopup(msg) {
     }
 
     for (let key in applyLinks) {
-        let ref = document.getElementById(key);
-        if (ref)
+        let refs = document.getElementsByClassName(key);
+        for (let ref of refs)
             ref.textContent = msg[applyLinks[key]];
     }
 }
@@ -171,9 +171,10 @@ function init() {
 
 // It is not allowed to call JavaScript from the HTML page, so we add listeners
 // on the click event for the commands to copy.
-for (let id in applyLinks) {
-    let node = document.getElementById(id).parentNode.parentNode;
-    node.addEventListener("click", copy);
+for (let className in applyLinks) {
+    let nodes = document.getElementsByClassName(className);
+    for (let node of nodes)
+        node.parentNode.parentNode.addEventListener("click", copy);
 }
 
 // Add a listener to receive the answer from background script and process the
