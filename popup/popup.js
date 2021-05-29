@@ -109,7 +109,7 @@ function updateCommandsWidth() {
 // Not tested yet: It appears even lone patches are part of a series.
 function deleteSeries() {
     let seriesItems = document.getElementsByClassName("series");
-    for (let node in seriesItems)
+    for (let node of seriesItems)
         node.remove();
 }
 
