@@ -7,6 +7,12 @@ const DefaultOptions = {
             mailingListString: "@vger.kernel.org",
         },
     ],
+    display: {
+        checks: true,
+        links: true,
+        gitpw: true,
+        curl: true,
+    }
 }
 
 const OptionsList = Object.keys(DefaultOptions);

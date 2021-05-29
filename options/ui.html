@@ -34,6 +34,13 @@
                 flex: 1;
                 margin-left: 1em;
             }
+            input[type="checkbox"] {
+                vertical-align: bottom;
+            }
+            .checkbox-list {
+                columns: 2;
+                margin-bottom: 1ex;
+            }
             .help-message {
                 color: var(--in-content-deemphasized-text);
             }
@@ -83,6 +90,36 @@
             retrieves information for the <em>first matching project</em> (as
             per the order in which they are defined above in this page).
         </span>
+        </p>
+
+        <p>
+            <b>Information to display</b>
+            <div class="checkbox-list">
+                <label>
+                    <input type="checkbox" id="display-checks">
+                    Checks results
+                </label>
+                <br />
+                <label>
+                    <input type="checkbox" id="display-links">
+                    Links to Patchwork and mailing list
+                </label>
+                <br />
+
+                <label>
+                    <input type="checkbox" id="display-gitpw">
+                    <code>git-pw</code> commands
+                </label>
+                <br />
+                <label>
+                    <input type="checkbox" id="display-curl">
+                    <code>curl | git am</code> commands
+                </label>
+            </div>
+            <span class="help-message">
+                Activate the checkboxes to have the related information
+                displayed in the popup.
+            </span>
         </p>
 
         <p>
