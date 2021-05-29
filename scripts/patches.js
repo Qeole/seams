@@ -23,7 +23,7 @@ export function isPatch(message, msgFull) {
     // message.subject trims the "Re: " prefix, get real subject from msgFull.
     let subject = msgFull.headers.subject[0];
 
-    // Check this is not a reply to a patch
+    // Check this is not a reply to a patch.
     if (subject[0] != "[")
         return false;
 
