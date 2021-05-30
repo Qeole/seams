@@ -1,140 +1,140 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: MIT -->
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <script type="module" src="popup.js"></script>
-    <style id="popup-style">
-        .section:first-child {
-            margin-top: 1ex;
-        }
-        .section {
-            margin: 0 1ex 1ex;
-            padding: 1ex;
-            background-color: rgb(239, 240, 241);
-        }
-        .title {
-            font-weight: bold;
-        }
-        span.title {
-            display: block;
-            float: left;
-            min-width: 5em;
-        }
-        div.title {
-            margin-bottom: 1ex;
-        }
-        .subtitle {
-            margin-top: 1ex;
-            margin-bottom: 1ex;
-            font-weight: bold;
-            font-size: small;
-            color: rgb(66, 68, 70);
-        }
-        .help-note {
-            font-size: smaller;
-            font-weight: normal;
-            color: grey;
-        }
-        ul {
-            padding-left: 2em;
-            margin-top: 0;
-            margin-bottom: 1ex;
-        }
-        ul:last-child {
-            margin-bottom: 0;
-        }
-        .copy-list {
-            list-style: none;
-            padding-left: 10px;
-        }
-        .copy-list li {
-            font-size: smaller;
-            width: 400px;
-        }
-        .copy-list li:hover {
-            background-color: #0a84ff;
-            color: white;
-        }
-        .shell-cmd:before {
-            content: "$";
-            color: black;
-            font: smaller;
-            font-family: monospace;
-            font-size: smaller;
-            display: inline-block;
-            margin-left: -10px;
-            width: 10px;
-        }
-        .link-list {
-            list-style: none;
-            padding-left: 0;
-        }
-        table {
-            font-size: small;
-        }
-        th, tr:hover {
-            background-color: rgb(217, 217, 218);
-        }
-    </style>
-  </head>
-  <body>
-      <div class="section">
-          <span class="title">Project</span>
-          <span id="popup-project"></span>
-      </div>
+    <head>
+        <meta charset="utf-8">
+        <script type="module" src="popup.js"></script>
+        <style id="popup-style">
+            .section:first-child {
+                margin-top: 1ex;
+            }
+            .section {
+                margin: 0 1ex 1ex;
+                padding: 1ex;
+                background-color: rgb(239, 240, 241);
+            }
+            .title {
+                font-weight: bold;
+            }
+            span.title {
+                display: block;
+                float: left;
+                min-width: 5em;
+            }
+            div.title {
+                margin-bottom: 1ex;
+            }
+            .subtitle {
+                margin-top: 1ex;
+                margin-bottom: 1ex;
+                font-weight: bold;
+                font-size: small;
+                color: rgb(66, 68, 70);
+            }
+            .help-note {
+                font-size: smaller;
+                font-weight: normal;
+                color: grey;
+            }
+            ul {
+                padding-left: 2em;
+                margin-top: 0;
+                margin-bottom: 1ex;
+            }
+            ul:last-child {
+                margin-bottom: 0;
+            }
+            .copy-list {
+                list-style: none;
+                padding-left: 10px;
+            }
+            .copy-list li {
+                font-size: smaller;
+                width: 400px;
+            }
+            .copy-list li:hover {
+                background-color: #0a84ff;
+                color: white;
+            }
+            .shell-cmd:before {
+                content: "$";
+                color: black;
+                font: smaller;
+                font-family: monospace;
+                font-size: smaller;
+                display: inline-block;
+                margin-left: -10px;
+                width: 10px;
+            }
+            .link-list {
+                list-style: none;
+                padding-left: 0;
+            }
+            table {
+                font-size: small;
+            }
+            th, tr:hover {
+                background-color: rgb(217, 217, 218);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="section">
+            <span class="title">Project</span>
+            <span id="popup-project"></span>
+        </div>
 
-      <div class="section" id="section-state">
-          <span class="title">State</span>
-          <span id="popup-state-dot">⬤</span>
-          <span id="popup-state"></span>
-      </div>
+        <div class="section" id="section-state">
+            <span class="title">State</span>
+            <span id="popup-state-dot">⬤</span>
+            <span id="popup-state"></span>
+        </div>
 
-      <div class="section" id="section-checks">
-          <span class="title">Checks</span>
-          <span id="popup-check-dot">●</span>
-          <span id="popup-check-result"></span>
-          <div id="popup-check-details-block">
-              <details id="popup-check-details-fold"><summary>Detailed results <span class="help-note">(Click to expand)</span></summary>
-                  <table id="popup-check-details">
-                      <tr>
-                          <th>Context</th>
-                          <th>Check</th>
-                          <th>Description</th>
-                      </tr>
-                  </table >
-              </details>
-          </div>
-          <span id="popup-check-results"></span>
-      </div>
+        <div class="section" id="section-checks">
+            <span class="title">Checks</span>
+            <span id="popup-check-dot">●</span>
+            <span id="popup-check-result"></span>
+            <div id="popup-check-details-block">
+                <details id="popup-check-details-fold"><summary>Detailed results <span class="help-note">(Click to expand)</span></summary>
+                    <table id="popup-check-details">
+                        <tr>
+                            <th>Context</th>
+                            <th>Check</th>
+                            <th>Description</th>
+                        </tr>
+                    </table>
+                </details>
+            </div>
+            <span id="popup-check-results"></span>
+        </div>
 
-      <div class="section" id="section-links">
-          <div class="title">Links <span class="help-note">(Right-click to open in browser or to copy)</span></div>
-          <ul class="link-list">
-              <li id="item-patch-link"><a id="popup-patch-link">Patchwork (patch)</a></li>
-              <li class="series"><a id="popup-series-link">Patchwork (series)</a></li>
-              <li><a id="popup-mail-archive"><span id="archive-name">Email</span> archives</a></li>
-          </ul>
-      </div>
+        <div class="section" id="section-links">
+            <div class="title">Links <span class="help-note">(Right-click to open in browser or to copy)</span></div>
+            <ul class="link-list">
+                <li id="item-patch-link"><a id="popup-patch-link">Patchwork (patch)</a></li>
+                <li class="series"><a id="popup-series-link">Patchwork (series)</a></li>
+                <li><a id="popup-mail-archive"><span id="archive-name">Email</span> archives</a></li>
+            </ul>
+        </div>
 
-      <div class="section" id="section-apply">
-          <div class="title">Apply Locally <span class="help-note">(Click commands to copy to clipboard)</span></div>
-          <div id="subsec-apply-patch">
-              <div class="subtitle">Patch</div>
-              <ul class="copy-list">
-                  <li class="item-id"><code><span class="popup-apply-patch-id"></span></code></li>
-                  <li class="item-gitpw shell-cmd"><code>git-pw patch apply <span class="popup-apply-patch-id"></span></code></li>
-                  <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-patch-git"></span> | git am -</code></li>
-              </ul>
-          </div>
-          <div>
-              <div class="subtitle series">Series</div>
-              <ul class="copy-list series">
-                  <li class="item-id"><code><span class="popup-apply-series-id"></span></code></li>
-                  <li class="item-gitpw shell-cmd"><code>git-pw series apply <span class="popup-apply-series-id"></span></code></li>
-                  <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-series-git"></span> | git am -</code></li>
-              </ul>
-          </div>
-      </div>
-  </body>
+        <div class="section" id="section-apply">
+            <div class="title">Apply Locally <span class="help-note">(Click commands to copy to clipboard)</span></div>
+            <div id="subsec-apply-patch">
+                <div class="subtitle">Patch</div>
+                <ul class="copy-list">
+                    <li class="item-id"><code><span class="popup-apply-patch-id"></span></code></li>
+                    <li class="item-gitpw shell-cmd"><code>git-pw patch apply <span class="popup-apply-patch-id"></span></code></li>
+                    <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-patch-git"></span> | git am -</code></li>
+                </ul>
+            </div>
+            <div>
+                <div class="subtitle series">Series</div>
+                <ul class="copy-list series">
+                    <li class="item-id"><code><span class="popup-apply-series-id"></span></code></li>
+                    <li class="item-gitpw shell-cmd"><code>git-pw series apply <span class="popup-apply-series-id"></span></code></li>
+                    <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-series-git"></span> | git am -</code></li>
+                </ul>
+            </div>
+        </div>
+    </body>
 </html>
