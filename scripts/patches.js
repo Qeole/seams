@@ -28,18 +28,6 @@ export async function findPatchworkInstance(message, msgFull) {
     if (!patchwork)
         return null;
 
-    // message.subject trims the "Re: " prefix, get real subject from msgFull.
-    let subject = msgFull.headers.subject[0];
-
-    // Check this is not a reply to a patch.
-    if (subject[0] != "[")
-        return null;
-
-    // Check this is not a cover letter.
-    // Might need a more robust (but slower) regex if too fragile.
-    if (subject.indexOf(" 0/") != -1)
-        return null;
-
     // Check this was sent with git-email.
     // /!\ In fact we don't want that, other tools are also used in the wild.
     //
