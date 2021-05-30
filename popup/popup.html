@@ -25,6 +25,7 @@
             margin-bottom: 1ex;
         }
         .subtitle {
+            margin-top: 1ex;
             margin-bottom: 1ex;
             font-weight: bold;
             font-size: small;
@@ -83,7 +84,7 @@
           <span id="popup-project"></span>
       </div>
 
-      <div class="section">
+      <div class="section" id="section-state">
           <span class="title">State</span>
           <span id="popup-state-dot">⬤</span>
           <span id="popup-state"></span>
@@ -110,7 +111,7 @@
       <div class="section" id="section-links">
           <div class="title">Links <span class="help-note">(Right-click to open in browser or to copy)</span></div>
           <ul class="link-list">
-              <li><a id="popup-patch-link">Patchwork (patch)</a></li>
+              <li id="item-patch-link"><a id="popup-patch-link">Patchwork (patch)</a></li>
               <li class="series"><a id="popup-series-link">Patchwork (series)</a></li>
               <li><a id="popup-mail-archive"><span id="archive-name">Email</span> archives</a></li>
           </ul>
@@ -118,18 +119,22 @@
 
       <div class="section" id="section-apply">
           <div class="title">Apply Locally <span class="help-note">(Click commands to copy to clipboard)</span></div>
-          <div class="subtitle">Patch</div>
-          <ul class="copy-list">
-              <li class="item-id"><code><span class="popup-apply-patch-id"></span></code></li>
-              <li class="item-gitpw shell-cmd"><code>git-pw patch apply <span class="popup-apply-patch-id"></span></code></li>
-              <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-patch-git"></span> | git am -</code></li>
-          </ul>
-          <div class="subtitle series">Series</div>
-          <ul class="copy-list series">
-              <li class="item-id"><code><span class="popup-apply-series-id"></span></code></li>
-              <li class="item-gitpw shell-cmd"><code>git-pw series apply <span class="popup-apply-series-id"></span></code></li>
-              <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-series-git"></span> | git am -</code></li>
-          </ul>
+          <div id="subsec-apply-patch">
+              <div class="subtitle">Patch</div>
+              <ul class="copy-list">
+                  <li class="item-id"><code><span class="popup-apply-patch-id"></span></code></li>
+                  <li class="item-gitpw shell-cmd"><code>git-pw patch apply <span class="popup-apply-patch-id"></span></code></li>
+                  <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-patch-git"></span> | git am -</code></li>
+              </ul>
+          </div>
+          <div>
+              <div class="subtitle series">Series</div>
+              <ul class="copy-list series">
+                  <li class="item-id"><code><span class="popup-apply-series-id"></span></code></li>
+                  <li class="item-gitpw shell-cmd"><code>git-pw series apply <span class="popup-apply-series-id"></span></code></li>
+                  <li class="item-curl shell-cmd"><code>curl <span class="popup-apply-series-git"></span> | git am -</code></li>
+              </ul>
+          </div>
       </div>
   </body>
 </html>

@@ -74,13 +74,17 @@ Patch detection currently works as follows:
   (“to” or “cc”), for example `@vger.kernel.org`.
 - The subject of the message must begin with a `[` character, this is to avoid
   considering replies to patches as patches.
-- The subject of the message must not contain the substring ` 0/`, which is
-  often the marker of a cover letter for a series and not of a patch.
+- Messages with subject matching ` 0+/` are considered as cover letters for a
+  patch series.
 
 When a message is displayed and recognized as a patch, the add-on sends an API
 request to the Patchwork instance to retrieve the state of the patch as well as
 some metadata. On clicking the action button, this information is reused to
 generate the panel.
+
+For cover letters, the add-on also retrieves some information, but elements
+such as the state of a patch or the results for the checks are not available
+(because not relevant) and hence not displayed.
 
 If several Patchwork instances are configured, and the message matches the
 pattern for several of them, the first one matching (as per the order in which

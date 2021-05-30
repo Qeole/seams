@@ -147,6 +147,14 @@ async function updatePopup(msg) {
         node.style.display = "none";
     }
 
+    // For cover letters, hide non-relevant items.
+    if (!msg.state) {
+        for (let id of ["section-state", "section-checks", "item-patch-link", "subsec-apply-patch"]) {
+            let node = document.getElementById(id);
+            node.style.display = "none";
+        }
+    }
+
     // Project name and state.
 
     for (let key in metadataValues) {

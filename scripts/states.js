@@ -4,6 +4,9 @@ export function getStateColor(state) {
     let color = "black";
 
     switch (state) {
+    case undefined:
+        // Cover letters.
+        color = "";
     case "new":
     case "under-review":
         color = "blue";

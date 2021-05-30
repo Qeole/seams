@@ -16,8 +16,13 @@ function sendReqForPath(patchwork, path) {
     return sendReq(`${patchwork.APIServer}${path}`);
 }
 
-export async function getPatchInfo(patchwork, msgId) {
-    let data = await sendReqForPath(patchwork, `/patches/?msgid=${msgId}`);
+export async function getPatchInfo(patchwork, msgId, isCoverLetter) {
+    let requestPath = "/patches";
+    if (isCoverLetter)
+        requestPath = "/covers";
+    requestPath += `/?msgid=${msgId}`;
+
+    let data = await sendReqForPath(patchwork, requestPath);
     if (!data || !data[0])
         return;
 
@@ -34,25 +39,27 @@ export async function getPatchInfo(patchwork, msgId) {
         }
     }
 
-    let patchInfo = {
-        state: patch.state,
+    let info = {
         projectName: patch.project.name,
         url: patch.web_url,
         archiveUrl: patch.list_archive_url,
         patchMbox: patch.mbox,
         patchId: patch.id,
-        checkResult: patch.check,
-        checkUrl: patch.checks,
     };
+    if (!isCoverLetter) {
+        info.state = patch.state;
+        info.checkResult = patch.check;
+        info.checkUrl = patch.checks;
+    }
     if (patch.series?.[0]) {
         // Append fields to query string to make sure we do not filter on
         // status and archived state, or the search may fail.
-        patchInfo.seriesUrl = patch.series[0].web_url + "&state=*&archive=both";
-        patchInfo.seriesId = patch.series[0].id;
-        patchInfo.seriesMbox = patch.series[0].mbox;
+        info.seriesUrl = patch.series[0].web_url + "&state=*&archive=both";
+        info.seriesId = patch.series[0].id;
+        info.seriesMbox = patch.series[0].mbox;
     }
 
-    return patchInfo;
+    return info;
 }
 
 export async function getCheckDetails(url) {

@@ -22,10 +22,21 @@ function updateActionBadge(state) {
     });
 }
 
+function clearActionBadge() {
+    browser.messageDisplayAction.setBadgeText({
+        text: null
+    });
+    browser.messageDisplayAction.setBadgeBackgroundColor({
+        color: null
+    });
+}
+
 // Update the action button:
 // - Enable or disable it, based on whether we think the message is a patch.
 // - Update the badge, based on patch state.
 async function updateActionForMsg(tab, message) {
+    const coverLetterRegex = new RegExp(" 0+/");
+
     let msgFull = await browser.messages.getFull(message.id);
 
     let patchwork = await findPatchworkInstance(message, msgFull);
@@ -33,10 +44,15 @@ async function updateActionForMsg(tab, message) {
         disableCurrentTab();
         return;
     }
+    clearActionBadge();
     enableCurrentTab();
 
     let msgId = await getMessageId(msgFull);
-    patchMetaData = await getPatchInfo(patchwork, msgId);
+
+    // message.subject trims the "Re: " prefix, get real subject from msgFull.
+    let subject = msgFull.headers.subject[0];
+
+    patchMetaData = await getPatchInfo(patchwork, msgId, coverLetterRegex.test(subject));
 
     // If we failed to get information for this patch, disable the button.
     if (!patchMetaData) {
@@ -44,7 +60,9 @@ async function updateActionForMsg(tab, message) {
         return;
     }
 
-    updateActionBadge(patchMetaData.state);
+    // Cover letters do not return state. Update for regular patches.
+    if (patchMetaData.state)
+        updateActionBadge(patchMetaData.state);
 }
 
 function sendDataToPopup(m) {
