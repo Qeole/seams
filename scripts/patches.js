@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 
-import { mailingListString } from "./patchwork.js";
+import { mailingListsArray } from "./patchwork.js";
 
 Array.prototype.hasSubstring = function (s) {
     for (let i = 0; i < this.length; i++)
@@ -16,8 +16,17 @@ export function isPatch(message, msgFull) {
     // but I am not sure that tools like l2md
     // (https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git/) set
     // them.
-    if (!(message.recipients.hasSubstring(mailingListString) ||
-          message.ccList.hasSubstring(mailingListString)))
+    let allowedList = false;
+
+    for (var mailingListString of mailingListsArray) {
+        if (message.recipients.hasSubstring(mailingListString) ||
+            message.ccList.hasSubstring(mailingListString)) {
+                allowedList = true;
+                break;
+        }
+    }
+
+    if (!allowedList)
         return false;
 
     // message.subject trims the "Re: " prefix, get real subject from msgFull.
