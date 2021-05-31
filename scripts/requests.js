@@ -21,22 +21,24 @@ export async function getPatchInfo(patchwork, msgId) {
     if (!data || !data[0])
         return;
 
+    const patch = data[0];
+
     let patchInfo = {
-        state: data[0].state,
-        projectName: data[0].project.name,
-        url: data[0].web_url,
-        archiveUrl: data[0].list_archive_url,
-        patchMbox: data[0].mbox,
-        patchId: data[0].id,
-        checkResult: data[0].check,
-        checkUrl: data[0].checks,
+        state: patch.state,
+        projectName: patch.project.name,
+        url: patch.web_url,
+        archiveUrl: patch.list_archive_url,
+        patchMbox: patch.mbox,
+        patchId: patch.id,
+        checkResult: patch.check,
+        checkUrl: patch.checks,
     };
-    if (data[0].series?.[0]) {
+    if (patch.series?.[0]) {
         // Append fields to query string to make sure we do not filter on
         // status and archived state, or the search may fail.
-        patchInfo.seriesUrl = data[0].series[0].web_url + "&state=*&archive=both";
-        patchInfo.seriesId = data[0].series[0].id
-        patchInfo.seriesMbox = data[0].series[0].mbox
+        patchInfo.seriesUrl = patch.series[0].web_url + "&state=*&archive=both";
+        patchInfo.seriesId = patch.series[0].id;
+        patchInfo.seriesMbox = patch.series[0].mbox;
     }
 
     return patchInfo;
