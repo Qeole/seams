@@ -21,7 +21,18 @@ export async function getPatchInfo(patchwork, msgId) {
     if (!data || !data[0])
         return;
 
-    const patch = data[0];
+    // Pick the first patch we find...
+    let patch = data[0];
+    // ... but if there are several ones, check if there is one that matches
+    // the mailing list pattern for the Patchwork instance we are working with.
+    if (data.length > 1) {
+        for (let p of data) {
+            if (p.project.list_email.indexOf(patchwork.mailingListString) !== -1) {
+                patch = p;
+                break;
+            }
+        }
+    }
 
     let patchInfo = {
         state: patch.state,
