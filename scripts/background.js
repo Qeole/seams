@@ -3,43 +3,43 @@
 import { getPatchInfo } from "./requests.js";
 import { getStateColor } from "./states.js";
 import { findPatchworkInstance } from "./patches.js";
-import { enableCurrentTab, disableCurrentTab } from "./tabs.js"
+import { enableCurrentTab, disableCurrentTab } from "./tabs.js";
 
-var patchMetaData = {};
+let patchMetaData = {};
 
-function getMessageId(msgFull) {
-    let msgId = msgFull.headers?.["message-id"]?.[0];
+function getMessageId (msgFull) {
+    const msgId = msgFull.headers?.["message-id"]?.[0];
     // ID is enclosed in angular brackets, trim them.
     return msgId.substring(1, msgId.length - 1);
 }
 
-function updateActionBadge(state) {
+function updateActionBadge (state) {
     browser.messageDisplayAction.setBadgeText({
-        text: state.substring(0,3) + (state.length > 3 ? "." : "")
+        text: state.substring(0, 3) + (state.length > 3 ? "." : ""),
     });
     browser.messageDisplayAction.setBadgeBackgroundColor({
-        color: getStateColor(state)
+        color: getStateColor(state),
     });
 }
 
-function clearActionBadge() {
+function clearActionBadge () {
     browser.messageDisplayAction.setBadgeText({
-        text: null
+        text: null,
     });
     browser.messageDisplayAction.setBadgeBackgroundColor({
-        color: null
+        color: null,
     });
 }
 
 // Update the action button:
 // - Enable or disable it, based on whether we think the message is a patch.
 // - Update the badge, based on patch state.
-async function updateActionForMsg(tab, message) {
-    const coverLetterRegex = new RegExp(" 0+/");
+async function updateActionForMsg (tab, message) {
+    const coverLetterRegex = / 0+\//;
 
-    let msgFull = await browser.messages.getFull(message.id);
+    const msgFull = await browser.messages.getFull(message.id);
 
-    let patchwork = await findPatchworkInstance(message, msgFull);
+    const patchwork = await findPatchworkInstance(message, msgFull);
     if (!patchwork) {
         disableCurrentTab();
         return;
@@ -47,10 +47,10 @@ async function updateActionForMsg(tab, message) {
     clearActionBadge();
     enableCurrentTab();
 
-    let msgId = await getMessageId(msgFull);
+    const msgId = await getMessageId(msgFull);
 
     // message.subject trims the "Re: " prefix, get real subject from msgFull.
-    let subject = msgFull.headers.subject[0];
+    const subject = msgFull.headers.subject[0];
 
     patchMetaData = await getPatchInfo(patchwork, msgId, coverLetterRegex.test(subject));
 
@@ -61,17 +61,17 @@ async function updateActionForMsg(tab, message) {
     }
 
     // Cover letters do not return state. Update for regular patches.
-    if (patchMetaData.state)
+    if (patchMetaData.state) {
         updateActionBadge(patchMetaData.state);
+    }
 }
 
-function sendDataToPopup(m) {
+function sendDataToPopup (m) {
     switch (m.cmd) {
     case "pleaseGiveTheData":
         browser.runtime.sendMessage(patchMetaData);
         break;
     default:
-        return;
     }
 }
 

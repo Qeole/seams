@@ -2,36 +2,40 @@
 
 const AddonName = browser.runtime.getManifest().name;
 
-function sendReq(url) {
+function sendReq (url) {
     return fetch(url)
         .then(resp => resp.json())
-        .then(data => { return data; })
+        .then(data => {
+            return data;
+        })
         .catch(reason => {
             console.warn(`[${AddonName}] Failed to retrieve or parse information: ${reason}`);
             return null;
         });
 }
 
-function sendReqForPath(patchwork, path) {
+function sendReqForPath (patchwork, path) {
     return sendReq(`${patchwork.APIServer}${path}`);
 }
 
-export async function getPatchInfo(patchwork, msgId, isCoverLetter) {
+export async function getPatchInfo (patchwork, msgId, isCoverLetter) {
     let requestPath = "/patches";
-    if (isCoverLetter)
+    if (isCoverLetter) {
         requestPath = "/covers";
+    }
     requestPath += `/?msgid=${msgId}`;
 
-    let data = await sendReqForPath(patchwork, requestPath);
-    if (!data || !data[0])
+    const data = await sendReqForPath(patchwork, requestPath);
+    if (!data || !data[0]) {
         return;
+    }
 
     // Pick the first patch we find...
     let patch = data[0];
     // ... but if there are several ones, check if there is one that matches
     // the mailing list pattern for the Patchwork instance we are working with.
     if (data.length > 1) {
-        for (let p of data) {
+        for (const p of data) {
             if (p.project.list_email.indexOf(patchwork.mailingListString) !== -1) {
                 patch = p;
                 break;
@@ -39,7 +43,7 @@ export async function getPatchInfo(patchwork, msgId, isCoverLetter) {
         }
     }
 
-    let info = {
+    const info = {
         projectName: patch.project.name,
         url: patch.web_url,
         archiveUrl: patch.list_archive_url,
@@ -62,13 +66,14 @@ export async function getPatchInfo(patchwork, msgId, isCoverLetter) {
     return info;
 }
 
-export async function getCheckDetails(url) {
-    let data = await sendReq(url);
-    if (!data || !data[0])
+export async function getCheckDetails (url) {
+    const data = await sendReq(url);
+    if (!data || !data[0]) {
         return;
+    }
 
-    let checkDetails = [];
-    for (let step of data) {
+    const checkDetails = [];
+    for (const step of data) {
         checkDetails.push({
             name: step.context,
             state: step.state,

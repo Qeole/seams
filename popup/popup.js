@@ -35,13 +35,13 @@ const displayOptsClasses = {
 
 // This should mirror the value for "copy-list .li" in popup CSS!
 const initCommandWidth = "400px";
-var commandWidth = initCommandWidth;
+let commandWidth = initCommandWidth;
 
-var checkUrl;
+let checkUrl;
 
-function copy() {
-    var node = this;
-    var content = this.innerHTML;
+function copy () {
+    const node = this;
+    const content = this.innerHTML;
     const transDur = 0.5;
 
     // Remove listener to avoid copying feedback message if user clicks twice.
@@ -69,118 +69,121 @@ function copy() {
     });
 }
 
-function addCheckDetailRow(step) {
-    let row = document.createElement("TR");
+function addCheckDetailRow (step) {
+    const row = document.createElement("TR");
 
-    let context = document.createElement("TD");
-    let link = document.createElement("A");
+    const context = document.createElement("TD");
+    const link = document.createElement("A");
     link.textContent = step.name;
     link.href = step.stepUrl;
     context.appendChild(link);
     row.appendChild(context);
 
-    let check = document.createElement("TD");
+    const check = document.createElement("TD");
     check.textContent = step.state;
     check.style.color = getCheckResultColor(step.state);
     row.appendChild(check);
 
-    let description = document.createElement("TD");
+    const description = document.createElement("TD");
     description.textContent = step.description;
     row.appendChild(description);
 
-    let checkDetails = document.getElementById("popup-check-details");
+    const checkDetails = document.getElementById("popup-check-details");
     checkDetails.appendChild(row);
 }
 
-async function fillCheckDetails() {
-    let detailsData = await getCheckDetails(checkUrl);
-    if (!detailsData || !detailsData[0])
+async function fillCheckDetails () {
+    const detailsData = await getCheckDetails(checkUrl);
+    if (!detailsData || !detailsData[0]) {
         return;
+    }
 
-    for (let step of detailsData) {
+    for (const step of detailsData) {
         addCheckDetailRow(step);
     }
 
     // Get width for table with check results; if wider than commands, update
     // width for commands.
-    let width = window.getComputedStyle(document.getElementById("popup-check-details")).width;
+    const width = window.getComputedStyle(document.getElementById("popup-check-details")).width;
     if (width > initCommandWidth) {
         commandWidth = width;
         updateCommandsWidth();
     }
 }
 
-function updateCommandsWidth() {
-    let rules = document.getElementById("popup-style").sheet.rules;
-    let rule = Array.prototype.find.call(rules, rule => rule.selectorText == ".copy-list li");
-    let fold = document.getElementById("popup-check-details-fold");
+function updateCommandsWidth () {
+    const rules = document.getElementById("popup-style").sheet.rules;
+    const rule = Array.prototype.find.call(rules, rule => rule.selectorText === ".copy-list li");
+    const fold = document.getElementById("popup-check-details-fold");
     // When fold is open, adapt commands width if necessary.
     rule.style.width = fold.open ? commandWidth : initCommandWidth;
 }
 
 // Not tested yet: It appears even lone patches are part of a series.
-function deleteSeries() {
-    let seriesItems = document.getElementsByClassName("series");
-    for (let node of seriesItems)
+function deleteSeries () {
+    const seriesItems = document.getElementsByClassName("series");
+    for (const node of seriesItems) {
         node.remove();
+    }
 }
 
-async function updatePopup(msg) {
+async function updatePopup (msg) {
     // Hide elements that user does not want to display.
-    let displayOpts = await getDisplayOpts();
-    for (let key in displayOptsIds) {
+    const displayOpts = await getDisplayOpts();
+    for (const key in displayOptsIds) {
         if (!displayOpts[displayOptsIds[key]]) {
-            let node = document.getElementById(key);
+            const node = document.getElementById(key);
             node.style.display = "none";
         }
     }
-    for (let key in displayOptsClasses) {
+    for (const key in displayOptsClasses) {
         if (!displayOpts[displayOptsClasses[key]]) {
-            let nodes = document.getElementsByClassName(key);
-            for (let node of nodes)
+            const nodes = document.getElementsByClassName(key);
+            for (const node of nodes) {
                 node.style.display = "none";
+            }
         }
     }
-    let shouldDisplaySecApply = displayOpts.giwpw || displayOpts.curl || displayOpts.id;
+    const shouldDisplaySecApply = displayOpts.giwpw || displayOpts.curl || displayOpts.id;
     if (!shouldDisplaySecApply) {
-        let node = document.getElementById("section-apply");
+        const node = document.getElementById("section-apply");
         node.style.display = "none";
     }
 
     // For cover letters, hide non-relevant items.
     if (!msg.state) {
-        for (let id of ["section-state", "section-checks", "item-patch-link", "subsec-apply-patch"]) {
-            let node = document.getElementById(id);
+        for (const id of ["section-state", "section-checks", "item-patch-link", "subsec-apply-patch"]) {
+            const node = document.getElementById(id);
             node.style.display = "none";
         }
     }
 
     // Project name and state.
 
-    for (let key in metadataValues) {
-        let node = document.getElementById(key);
+    for (const key in metadataValues) {
+        const node = document.getElementById(key);
         node.textContent = msg[metadataValues[key]];
     }
 
-    let stateDot = document.getElementById("popup-state-dot");
+    const stateDot = document.getElementById("popup-state-dot");
     stateDot.style.color = getStateColor(msg.state);
 
     // Checks.
 
     if (displayOpts.checks) {
-        let checkDot = document.getElementById("popup-check-dot");
+        const checkDot = document.getElementById("popup-check-dot");
         checkDot.style.color = getCheckResultColor(msg.checkResult);
 
-        let checkDetailsBlock = document.getElementById("popup-check-details-block");
-        if (msg.checkResult == "pending") {
+        const checkDetailsBlock = document.getElementById("popup-check-details-block");
+        if (msg.checkResult === "pending") {
             checkDetailsBlock.remove();
         } else {
             checkUrl = msg.checkUrl;
             // Trigger API request and table fill on click, but make sure this
             // is run only once.
             checkDetailsBlock.addEventListener("click", fillCheckDetails,
-                                          { once: true });
-            let checkDetailsFold = document.getElementById("popup-check-details-fold");
+                { once: true });
+            const checkDetailsFold = document.getElementById("popup-check-details-fold");
             checkDetailsFold.addEventListener("toggle", updateCommandsWidth);
         }
     }
@@ -188,19 +191,19 @@ async function updatePopup(msg) {
     // Links.
 
     if (displayOpts.links) {
-        for (let key in metadataLinks) {
-            let link = document.getElementById(key);
+        for (const key in metadataLinks) {
+            const link = document.getElementById(key);
             link.href = msg[metadataLinks[key]];
         }
 
-        if (msg.archiveUrl && msg.archiveUrl.indexOf("lore.kernel.org") != -1) {
-            let lore = document.getElementById("archive-name");
+        if (msg.archiveUrl && msg.archiveUrl.indexOf("lore.kernel.org") !== -1) {
+            const lore = document.getElementById("archive-name");
             lore.textContent = "Lore";
         }
 
-        let seriesUrl = msg.seriesUrl;
+        const seriesUrl = msg.seriesUrl;
         if (seriesUrl) {
-            let seriesLink = document.getElementById("popup-series-link");
+            const seriesLink = document.getElementById("popup-series-link");
             seriesLink.href = seriesUrl;
         } else {
             deleteSeries();
@@ -210,26 +213,28 @@ async function updatePopup(msg) {
     // Commands to apply locally.
 
     if (shouldDisplaySecApply) {
-        for (let key in applyLinks) {
-            let refs = document.getElementsByClassName(key);
-            for (let ref of refs)
+        for (const key in applyLinks) {
+            const refs = document.getElementsByClassName(key);
+            for (const ref of refs) {
                 ref.textContent = msg[applyLinks[key]];
+            }
         }
     }
 }
 
-function init() {
+function init () {
     browser.runtime.sendMessage({
-        cmd: "pleaseGiveTheData"
+        cmd: "pleaseGiveTheData",
     });
 }
 
 // It is not allowed to call JavaScript from the HTML page, so we add listeners
 // on the click event for the commands to copy.
-for (let className in applyLinks) {
-    let nodes = document.getElementsByClassName(className);
-    for (let node of nodes)
+for (const className in applyLinks) {
+    const nodes = document.getElementsByClassName(className);
+    for (const node of nodes) {
         node.parentNode.parentNode.addEventListener("click", copy);
+    }
 }
 
 // Add a listener to receive the answer from background script and process the

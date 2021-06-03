@@ -1,14 +1,14 @@
 /* SPDX-License-Identifier: MIT */
 
-import * as prefs from "./save-restore.js"
+import * as prefs from "./save-restore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     prefs.restoreAllOptions();
 });
 
-(function addInputListeners() {
-    let inputs = document.getElementsByTagName("input");
-    for (let input of inputs) {
+(function addInputListeners () {
+    const inputs = document.getElementsByTagName("input");
+    for (const input of inputs) {
         switch (input.type) {
         case "text":
             input.addEventListener("change", (e) => {

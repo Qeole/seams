@@ -1,12 +1,9 @@
 /* SPDX-License-Identifier: MIT */
 
-export function getStateColor(state) {
+export function getStateColor (state) {
     let color = "black";
 
     switch (state) {
-    case undefined:
-        // Cover letters.
-        color = "";
     case "new":
     case "under-review":
         color = "blue";
@@ -34,7 +31,7 @@ export function getStateColor(state) {
     return color;
 }
 
-export function getCheckResultColor(result) {
+export function getCheckResultColor (result) {
     let color = "black";
 
     switch (result) {

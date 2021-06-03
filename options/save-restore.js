@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 
-import { DefaultOptions, OptionsList } from "./defaults.js"
+import { DefaultOptions, OptionsList } from "./defaults.js";
 
 const AddonName = browser.runtime.getManifest().name;
 
@@ -15,133 +15,142 @@ const displayCheckOptionMap = {
     "display-id": "id",
     "display-gitpw": "gitpw",
     "display-curl": "curl",
-}
+};
 
-function loadOption(id) {
+function loadOption (id) {
     return browser.storage.local.get(id).then((res) => {
-        if (res[id] != undefined)
+        if (res[id] !== undefined) {
             return res[id];
-        else
+        } else {
             return DefaultOptions[id];
+        }
     }, `[${AddonName}] Failed to load option`);
 }
 
-function saveDisplayCheckOptions(e) {
-    let options = {};
-    for (let id in displayCheckOptionMap) {
-        let checkbox = document.getElementById(id);
+function saveDisplayCheckOptions (e) {
+    const options = {};
+    for (const id in displayCheckOptionMap) {
+        const checkbox = document.getElementById(id);
         options[displayCheckOptionMap[id]] = checkbox.checked;
     }
 
-    return browser.storage.local.set({display: options});
+    return browser.storage.local.set({ display: options });
 }
 
-async function restoreDisplayCheckOptions() {
-    let options = await loadOption("display");
-    for (let id in displayCheckOptionMap) {
-        let checkbox = document.getElementById(id);
+async function restoreDisplayCheckOptions () {
+    const options = await loadOption("display");
+    for (const id in displayCheckOptionMap) {
+        const checkbox = document.getElementById(id);
         checkbox.checked = options[displayCheckOptionMap[id]];
     }
 }
 
-function savePatchworkTextOptions(e) {
-    let options = [];
-    let patchworkBlocks = document.getElementsByClassName("patchwork-instance");
-    for (let block of patchworkBlocks) {
-        let option = {};
-        for (let className in patchworkTextOptionMap)
+function savePatchworkTextOptions (e) {
+    const options = [];
+    const patchworkBlocks = document.getElementsByClassName("patchwork-instance");
+    for (const block of patchworkBlocks) {
+        const option = {};
+        for (const className in patchworkTextOptionMap) {
             option[patchworkTextOptionMap[className]] = block.querySelector(className).value;
-        if (option.APIServer)
+        }
+        if (option.APIServer) {
             options.push(option);
+        }
     }
 
-    return browser.storage.local.set({patchworks: options});
+    return browser.storage.local.set({ patchworks: options });
 }
 
-function enableNewInstance() {
+function enableNewInstance () {
     document.getElementById("addPatchworkInstance").disabled = false;
 }
 
-function disableNewInstances() {
+function disableNewInstances () {
     document.getElementById("addPatchworkInstance").disabled = true;
 }
 
-function addInstanceBlock() {
+function addInstanceBlock () {
     // Aribitrarily prevent more than 10 instances to avoid the risk of messing
     // up with the interface, and because users are unlikely to use the add-on
     // for more than 10 projects at a time. Drop an issue on GitHub otherwise.
     const maxInstances = 10;
-    let instances = document.getElementsByClassName("patchwork-instance");
-    let instancesCount = instances.length;
+    const instances = document.getElementsByClassName("patchwork-instance");
+    const instancesCount = instances.length;
 
-    if (instancesCount >= maxInstances - 1)
+    if (instancesCount >= maxInstances - 1) {
         disableNewInstances();
-    if (instancesCount >= maxInstances)
+    }
+    if (instancesCount >= maxInstances) {
         return;
+    }
 
-    let lastInstance = instances[instancesCount - 1];
-    let newInstance = lastInstance.cloneNode(true);
+    const lastInstance = instances[instancesCount - 1];
+    const newInstance = lastInstance.cloneNode(true);
 
-    let lastIdNumberMatch = lastInstance.id.match("patchwork-instance-([0-9])*$");
+    const lastIdNumberMatch = lastInstance.id.match("patchwork-instance-([0-9])*$");
     if (lastIdNumberMatch.length < 2) {
         console.error(`[${AddonName}] Bug: malformed id for Patchwork instance block`);
-        return null
+        return null;
     }
-    let newIdNumber = parseInt(lastIdNumberMatch[1]) + 1
+    const newIdNumber = parseInt(lastIdNumberMatch[1]) + 1;
     newInstance.setAttribute("id", "patchwork-instance-" + newIdNumber);
 
-    let inputs = newInstance.querySelectorAll("input");
-    for (let input of inputs) {
+    const inputs = newInstance.querySelectorAll("input");
+    for (const input of inputs) {
         input.value = "";
         input.addEventListener("change", (e) => {
             savePatchworkTextOptions(e);
         });
     }
 
-    let helpMessages = newInstance.querySelectorAll(".help-message");
-    for (let helpMessage of helpMessages)
-        helpMessage.style["display"] = "none";
+    const helpMessages = newInstance.querySelectorAll(".help-message");
+    for (const helpMessage of helpMessages) {
+        helpMessage.style.display = "none";
+    }
 
     return lastInstance.parentNode.insertBefore(newInstance, lastInstance.nextSibling);
 }
 
-function fillInstance(block, option) {
-    for (let className in patchworkTextOptionMap)
+function fillInstance (block, option) {
+    for (const className in patchworkTextOptionMap) {
         block.querySelector(className).value = option[patchworkTextOptionMap[className]];
+    }
 }
 
-function restorePatchworkInstances() {
+function restorePatchworkInstances () {
     return browser.storage.local.get("patchworks").then((res) => {
         let patchworks = res.patchworks;
-        if (!res.patchworks || !patchworks.length)
+        if (!res.patchworks || !patchworks.length) {
             patchworks = JSON.parse(JSON.stringify(DefaultOptions.patchworks));
+        }
 
-        let firstInstanceOption = patchworks.shift();
-        let firstInstanceBlock = document.getElementById("patchwork-instance-0" );
+        const firstInstanceOption = patchworks.shift();
+        const firstInstanceBlock = document.getElementById("patchwork-instance-0");
         fillInstance(firstInstanceBlock, firstInstanceOption);
 
-        for (let option of patchworks) {
-            let block = addInstanceBlock();
+        for (const option of patchworks) {
+            const block = addInstanceBlock();
             fillInstance(block, option);
         }
     }, `[${AddonName}] Failed to load option`);
 }
 
-async function restoreAllOptions() {
+async function restoreAllOptions () {
     await restorePatchworkInstances();
     await restoreDisplayCheckOptions();
 }
 
-function deleteAdditionalInstances() {
-    let instances = Array.from(document.getElementsByClassName("patchwork-instance"));
-    for (let instance of instances) {
-        if (instance.id == "patchwork-instance-0")
+function deleteAdditionalInstances () {
+    const instances = Array.from(document.getElementsByClassName("patchwork-instance"));
+    for (const instance of instances) {
+        if (instance.id === "patchwork-instance-0") {
             continue;
+        }
         instance.remove();
     }
 }
 
-function resetAllOptions() {
+function resetAllOptions () {
     return browser.storage.local.remove(OptionsList).then(() => {
         restoreAllOptions();
         deleteAdditionalInstances();

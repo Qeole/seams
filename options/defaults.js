@@ -13,8 +13,8 @@ const DefaultOptions = {
         id: false,
         gitpw: true,
         curl: true,
-    }
-}
+    },
+};
 
 const OptionsList = Object.keys(DefaultOptions);
 
