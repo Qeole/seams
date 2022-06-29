@@ -39,12 +39,13 @@ async function updateActionForMsg (tab, message) {
 
     const msgFull = await browser.messages.getFull(message.id);
 
+    clearActionBadge();
+
     const patchwork = await findPatchworkInstance(message, msgFull);
     if (!patchwork) {
         disableCurrentTab();
         return;
     }
-    clearActionBadge();
     enableCurrentTab();
 
     const msgId = await getMessageId(msgFull);
