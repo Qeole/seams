@@ -7,7 +7,7 @@
         }
     },
     "name": "Seams",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Patchwork integration for Thunderbird",
     "author": "Qeole",
     "homepage_url": "https://github.com/Qeole/seams",
