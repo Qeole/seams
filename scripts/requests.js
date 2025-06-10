@@ -3,7 +3,16 @@
 const AddonName = browser.runtime.getManifest().name;
 
 function sendReq (url) {
-    return fetch(url)
+    let headers = new Headers({
+        "Accept"       : "application/json",
+        "Content-Type" : "application/json",
+        "User-Agent"   : "tb-seams-addon/1.0 (qeole@outlook.com)"
+    });
+
+    return fetch(url, {
+            method  : 'GET',
+            headers : headers
+        })
         .then(resp => resp.json())
         .then(data => {
             return data;
