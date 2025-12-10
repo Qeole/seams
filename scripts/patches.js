@@ -25,6 +25,16 @@ export async function findPatchworkInstance (message, msgFull) {
             patchwork = instance;
             break;
         }
+        // Fallback: Check raw headers directly for NNTP support.
+        // MessageHeader object may not provide recipients/ccList correctly
+        // for NNTP messages, but msgFull.headers contains the raw values.
+        const toHeader = msgFull.headers?.["to"] || [];
+        const ccHeader = msgFull.headers?.["cc"] || [];
+        if (hasSubstring(toHeader, instance.mailingListString) ||
+            hasSubstring(ccHeader, instance.mailingListString)) {
+            patchwork = instance;
+            break;
+        }
     }
     if (!patchwork) {
         return null;
